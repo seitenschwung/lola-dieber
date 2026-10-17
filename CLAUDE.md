@@ -4,6 +4,11 @@
 > in, delete this note and open a PR. Keep this file under 60 lines. Tools, MCPs and box rules
 > are in the global box CLAUDE.md, don't repeat them here.
 
+## Demo content
+`public/`, `Dockerfile` and `nginx.conf` are a placeholder static site that already satisfies the
+contract below and keeps CI green. Replace them with the real project (or adapt them), then delete
+this section.
+
 ## Purpose
 TODO: what this project is, for whom, and the production URL.
 
@@ -20,8 +25,8 @@ TODO: language, framework, database, notable libraries.
 TODO: the few folders that matter.
 
 ## CI and deploy contract
-`.github/workflows/ci.yml` is managed by the owner. You can't change workflow files, so build
-the project to fit it:
+`.github/workflows/ci.yml` is a thin caller of the shared pipeline in `seitenschwung/template`,
+managed by the owner. You can't change workflow files, so build the project to fit it:
 - If `package-lock.json` exists, CI runs `npm ci`, then `npm run lint`, `npm test` and
   `npm run build` when those scripts exist. Keep them green locally before pushing.
 - If a `Dockerfile` exists, CI builds it and runs the image hardened: read-only root

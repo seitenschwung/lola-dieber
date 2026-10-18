@@ -37,6 +37,12 @@ managed by the owner. You can't change workflow files, so build the project to f
   - serve `GET /version.txt` with the build argument `APP_VERSION` (the commit SHA)
 - If `/` returns HTML, CI also crawls the site with Playwright, axe (WCAG AA, serious and
   critical findings fail) and Lighthouse (accessibility, best practices and SEO at least 90).
+- A Dockerfile stage named `test` (`FROM ... AS test`) is built first: put lint and tests there for
+  stacks without `package-lock.json`. It must not be the last stage.
+- `docker-compose.yml` keeps the CrowdSec labels (`crowdsec.enable=true`,
+  `crowdsec.labels.type=nginx`) and the json-file log rotation on every service that serves traffic.
+  The CrowdSec agent on the server reads the container logs through them. Don't remove them; the
+  type must match a parser there, so ask the owner before changing it.
 - `docker-compose.yml` is what Coolify runs. Keep `image: ${IMAGE}`: the pipeline pushes
   the tested image to ghcr.io and tells Coolify which tag to run.
 - `main` is production: every merge deploys after green CI. Work on branches, open PRs.

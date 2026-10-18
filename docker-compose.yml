@@ -6,6 +6,15 @@ services:
     # (an environment variable in Coolify) to exactly that tag before every deploy.
     image: ${IMAGE:?set by the CI deploy job}
     restart: unless-stopped
+    # CrowdSec reads this container's logs through the Docker API (labels, see CLAUDE.md).
+    labels:
+      - crowdsec.enable=true
+      - crowdsec.labels.type=nginx
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     expose:
       - "8080"
     read_only: true

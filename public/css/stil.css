@@ -24,7 +24,7 @@
 :root {
   --papier: #EDEFE8;
   --leinen: #E2E6DC;
-  --malve: #E3D3CF;
+  --lehm: #E2D5C0;
   --tinte: #22302A;
   --tinte-leise: #4E5852;
   --kaki: #C9532A;
@@ -46,7 +46,7 @@
   :root {
     --papier: #18201C;
     --leinen: #1F2924;
-    --malve: #2B2426;
+    --lehm: #2A251D;
     --tinte: #E7EAE2;
     --tinte-leise: #9DA79F;
     --kaki: #ED8C66;
@@ -181,8 +181,16 @@ a:hover { text-decoration-thickness: 2px; }
 /* ---------- Hero ---------- */
 .hero { display: grid; gap: 48px; padding-block: clamp(40px, 7vw, 96px) clamp(56px, 8vw, 112px); }
 .hero-text { display: grid; gap: 28px; align-content: start; }
-.rollen { display: flex; flex-wrap: wrap; gap: 8px; }
-.rollen li { font: 500 0.78rem var(--f-mono); padding: 6px 10px; border-radius: 6px; background: var(--leinen); }
+/* Qualifikationen: ruhiger Block in der Displayschrift mit feiner Kaki-Linie, wie ein Briefkopf */
+.rollen {
+  display: grid; gap: 4px;
+  padding-left: 20px; border-left: 2px solid var(--kaki);
+}
+.rollen li {
+  font: 500 clamp(1.2rem, 1.9vw, 1.55rem) / 1.3 var(--f-display);
+  letter-spacing: -0.015em; color: var(--tinte);
+}
+.rollen li:first-child { font-weight: 600; }
 .hero h1 {
   font-size: clamp(2.6rem, 6.2vw, 5.6rem);
   font-weight: 500; letter-spacing: -0.04em; line-height: 0.98; max-width: 12ch;
@@ -203,33 +211,42 @@ a:hover { text-decoration-thickness: 2px; }
   transition: color 0.3s;
 }
 .textlink:hover { color: var(--kaki-text); }
-.hero-bild { position: relative; width: 100%; max-width: 480px; justify-self: center; }
-.hero-bild::before {
-  content: ""; position: absolute; width: 60%; aspect-ratio: 1; border-radius: 50%;
-  background: var(--kaki); left: -14%; bottom: -7%;
+/* Atemkreis: 8 s einatmen (Kreis wächst), 8 s ausatmen (Kreis schrumpft), Wort wechselt mit */
+.atemkreis {
+  position: relative; width: min(100%, 520px); aspect-ratio: 1; justify-self: center;
+  display: grid; place-items: center;
 }
-.hero-bild img { position: relative; width: 100%; border-radius: 200px 200px 6px 6px; }
-.atem {
-  position: absolute; right: -4px; top: 16%;
-  display: flex; align-items: center; gap: 10px;
-  background: var(--papier); border-radius: 999px; padding: 10px 16px 10px 10px;
-  font: 500 0.78rem var(--f-mono); box-shadow: var(--schatten);
+.atemkreis-form {
+  position: absolute; inset: 0; border-radius: 50%; background: var(--kaki);
+  transform: scale(0.55);
+  animation: atem-kreis 16s ease-in-out infinite;
 }
-.atem-punkt {
-  width: 22px; height: 22px; border-radius: 50%; background: var(--kaki);
-  animation: atmen 10s var(--ease) infinite;
-}
-@keyframes atmen {
-  0% { transform: scale(0.45); }
-  40% { transform: scale(1); }
+@keyframes atem-kreis {
+  0%, 100% { transform: scale(0.55); }
   50% { transform: scale(1); }
-  100% { transform: scale(0.45); }
+}
+.atem-wort {
+  grid-area: 1 / 1; position: relative;
+  font: 500 clamp(1.6rem, 3.2vw, 2.4rem) / 1 var(--f-display); letter-spacing: -0.02em;
+  color: var(--papier);
+}
+.atem-ein { animation: atem-ein 16s ease-in-out infinite; }
+.atem-aus { animation: atem-aus 16s ease-in-out infinite; }
+.atem-zahl {
+  grid-area: 1 / 1; position: relative; transform: translateY(1.7em);
+  font: 500 clamp(1.5rem, 2.2vw, 1.9rem) / 1 var(--f-mono); font-variant-numeric: tabular-nums;
+  color: var(--papier);
+}
+@keyframes atem-ein {
+  0% { opacity: 0; } 4%, 46% { opacity: 1; } 50%, 100% { opacity: 0; }
+}
+@keyframes atem-aus {
+  0%, 50% { opacity: 0; } 54%, 96% { opacity: 1; } 100% { opacity: 0; }
 }
 @media (min-width: 900px) {
   .hero { grid-template-columns: 7fr 5fr; gap: 32px; }
   .hero-text { padding-left: 4vw; padding-top: 48px; }
-  .hero-bild { justify-self: end; }
-  .atem { right: -24px; }
+  .atemkreis { justify-self: end; }
 }
 
 /* ---------- Atemlinie ---------- */
@@ -242,6 +259,16 @@ a:hover { text-decoration-thickness: 2px; }
 .js .atemlinie path { stroke-dashoffset: 2600; transition: stroke-dashoffset 3.2s var(--ease); }
 .js .atemlinie.sichtbar path { stroke-dashoffset: 0; }
 
+/* Satz zur Atemlinie: steht dort, wo die Linie zur Ruhe kommt */
+.faden {
+  font: 500 clamp(1.4rem, 2.6vw, 2.2rem) / 1.2 var(--f-display); letter-spacing: -0.02em;
+  color: var(--tinte); text-wrap: balance; max-width: 22ch; margin-top: 12px;
+}
+.faden-rot { color: var(--kaki-text); white-space: nowrap; }
+@media (min-width: 900px) {
+  .faden { margin-left: auto; text-align: right; margin-top: -24px; }
+}
+
 /* ---------- Sektionen allgemein ---------- */
 .sektion { padding-top: var(--gap-sektion); scroll-margin-top: 72px; }
 .sektion-kopf { display: grid; gap: 18px; margin-bottom: clamp(40px, 6vw, 72px); }
@@ -250,7 +277,7 @@ a:hover { text-decoration-thickness: 2px; }
   .sektion-kopf .label { padding-top: 0.9em; }
 }
 .band { background: var(--leinen); padding-block: clamp(72px, 10vw, 140px); margin-top: var(--gap-sektion); }
-.band.malve { background: var(--malve); }
+.band.lehm { background: var(--lehm); }
 .band + .sektion { padding-top: var(--gap-sektion); }
 .band .sektion { padding-top: 0; }
 
@@ -261,12 +288,12 @@ a:hover { text-decoration-thickness: 2px; }
   text-decoration: none; color: var(--tinte); background: var(--leinen);
   transition: transform 0.5s var(--ease), background 0.3s;
 }
-.raum:nth-child(2) { background: var(--malve); }
+.raum:nth-child(2) { background: var(--lehm); }
 .raum:hover { transform: translateY(-4px); }
 .raum:active { transform: translateY(0) scale(0.99); }
 .raum .mono { color: var(--tinte-leise); }
 .raum-pfeil { color: var(--kaki-text); font-weight: 600; font-size: 0.95rem; }
-/* Kaki dunkel erreicht auf Malve kein AA, dort Tinte verwenden */
+/* Kaki dunkel erreicht auf Lehm kein AA, dort Tinte verwenden */
 .raum:nth-child(2) .raum-pfeil { color: var(--tinte); }
 @media (min-width: 640px) { .raeume { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1000px) {
@@ -284,7 +311,7 @@ a:hover { text-decoration-thickness: 2px; }
   padding: 16px 0; border-bottom: 1px solid var(--linie);
 }
 .bild-eck img { border-radius: 140px 6px 6px 6px; }
-.hinweis { background: var(--malve); border-radius: 16px; padding: 20px 22px; display: grid; gap: 6px; font-size: 0.95rem; }
+.hinweis { background: var(--lehm); border-radius: 16px; padding: 20px 22px; display: grid; gap: 6px; font-size: 0.95rem; }
 @media (min-width: 900px) {
   .zweispalter { grid-template-columns: 7fr 4fr; gap: 80px; align-items: start; }
   .zweispalter.gespiegelt { grid-template-columns: 5fr 7fr; }
@@ -300,8 +327,15 @@ a:hover { text-decoration-thickness: 2px; }
 @media (min-width: 900px) {
   .feld { grid-template-columns: 4fr 5fr 3fr; gap: 40px; align-items: start; }
 }
-.feld .stichworte { display: flex; flex-wrap: wrap; gap: 8px; }
-.feld .stichworte li { font: 500 0.75rem var(--f-mono); padding: 5px 9px; border-radius: 6px; border: 1px solid var(--linie); }
+/* Stichworte: ruhige Liste mit kurzem Kaki-Strich statt Tags */
+.feld .stichworte { display: grid; gap: 8px; }
+.feld .stichworte li {
+  display: flex; align-items: baseline; gap: 12px;
+  font: 500 1.02rem / 1.35 var(--f-display); letter-spacing: -0.01em; color: var(--tinte);
+}
+.feld .stichworte li::before {
+  content: ""; flex: 0 0 14px; height: 2px; background: var(--kaki); transform: translateY(-0.3em);
+}
 
 /* ---------- Lehre ---------- */
 .lehre { display: grid; gap: 48px; }
@@ -334,18 +368,6 @@ figure { margin: 0; }
   .yoga-hero { margin-left: 12%; }
 }
 
-/* ---------- Zitat ---------- */
-.zitat-reihe { display: grid; gap: 40px; align-items: center; }
-.zitat blockquote {
-  margin: 0; font: 500 clamp(1.7rem, 3.6vw, 3rem)/1.15 var(--f-display);
-  letter-spacing: -0.03em; text-wrap: balance; max-width: 24ch;
-}
-.zitat-bild img { width: 100%; border-radius: 120px 6px 6px 6px; }
-@media (min-width: 900px) {
-  .zitat-reihe { grid-template-columns: 6fr 5fr; gap: 72px; }
-  .zitat { padding-left: 8%; }
-}
-
 /* ---------- Über mich ---------- */
 .ueber { display: grid; gap: 48px; }
 .ueber-bilder { position: relative; max-width: 420px; padding-bottom: 72px; }
@@ -372,11 +394,12 @@ figure { margin: 0; }
 .kontakt-wege li { padding: 18px 0; border-bottom: 1px solid var(--linie); display: grid; gap: 4px; }
 .kontakt-wege a { font: 500 1.25rem var(--f-display); color: var(--tinte); text-decoration-color: var(--kaki); }
 .kopieren {
-  justify-self: start; font: 500 0.8rem var(--f-mono); color: var(--tinte);
-  background: var(--leinen); border: 0; border-radius: 6px; padding: 6px 10px; cursor: pointer;
+  justify-self: start; font: 600 0.92rem var(--f-text); color: var(--tinte);
+  background: none; border: 0; padding: 2px 0; cursor: pointer;
+  border-bottom: 1.5px solid var(--kaki); transition: color 0.3s;
 }
-.kopieren:hover { background: var(--malve); }
-.kopieren:active { transform: scale(0.98); }
+.kopieren:hover { color: var(--kaki-text); }
+.kopieren:active { transform: translateY(1px); }
 @media (min-width: 900px) { .kontakt { grid-template-columns: 7fr 5fr; gap: 80px; align-items: end; } }
 
 /* ---------- Fuß ---------- */
@@ -391,7 +414,7 @@ figure { margin: 0; }
 .textseite h2 { font-size: 1.5rem; margin-top: 24px; }
 .textseite p, .textseite li { max-width: 68ch; }
 .textseite ul { list-style: disc; padding-left: 1.2em; display: grid; gap: 6px; }
-.platzhalter { background: var(--malve); border-radius: 4px; padding: 0 4px; }
+.platzhalter { background: var(--lehm); border-radius: 4px; padding: 0 4px; }
 
 /* ---------- Einblenden ---------- */
 .js .auf { opacity: 0; transform: translateY(18px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
@@ -399,16 +422,173 @@ figure { margin: 0; }
 
 @media (max-width: 560px) {
   .fakten li { grid-template-columns: 1fr; gap: 2px; }
-  .atem { right: 8px; top: auto; bottom: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .atem-punkt { animation: none; transform: scale(0.8); }
+  .atemkreis-form { animation: none; transform: scale(0.8); }
+  .atem-ein, .atem-aus { animation: none; opacity: 1; }
+  .atem-ein { transform: translateY(-0.7em); }
+  .atem-aus { transform: translateY(0.7em); }
   .js .auf { opacity: 1; transform: none; transition: none; }
   .js .atemlinie path { stroke-dashoffset: 0; transition: none; }
   *, *::before, *::after { transition-duration: 0s !important; }
 }
 
-/* Auf dem Handy reicht ein Yoga-Bild */
-@media (max-width: 899px) { .yoga-bild { display: none; } }
+
+/* ---------- Wissen: Flyer ---------- */
+.wissen-lead { margin-bottom: clamp(40px, 6vw, 72px); font-size: 1.1rem; }
+.flyer-liste { display: grid; gap: 48px; }
+.flyer { display: grid; grid-template-columns: minmax(110px, 190px) 1fr; gap: 28px; align-items: center; }
+.flyer-bild {
+  display: block; border-radius: 6px; overflow: hidden; box-shadow: var(--schatten);
+  transform: perspective(900px) rotate(var(--kippen, -2deg));
+  transition: transform 0.6s var(--ease), box-shadow 0.4s;
+}
+.flyer:nth-child(even) .flyer-bild { --kippen: 2.5deg; }
+.flyer-bild:hover { transform: perspective(900px) rotate(0deg) translateY(-6px); }
+.flyer-bild img { width: 100%; }
+.flyer-text { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.download {
+  justify-self: start; display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
+  margin-top: 6px; padding: 12px 18px; border-radius: 999px;
+  background: var(--tinte); color: var(--auf-tinte); text-decoration: none; font-weight: 600;
+  transition: background 0.3s, transform 0.4s var(--ease);
+}
+.download .mono { font-size: 0.72rem; font-weight: 400; opacity: 0.85; }
+.download:hover { background: var(--kaki-text); color: var(--papier); }
+.download:active { transform: scale(0.98); }
+@media (min-width: 900px) {
+  .flyer-liste { grid-template-columns: 1fr 1fr; column-gap: 72px; row-gap: 64px; }
+  .flyer:nth-child(even) { margin-top: 120px; }
+}
+
+/* ---------- Beiträge ---------- */
+.beitraege-kopf {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  margin-top: clamp(80px, 11vw, 160px); margin-bottom: 24px;
+  border-top: 1px solid var(--linie); padding-top: 24px;
+}
+.beitraege-kopf h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 500; letter-spacing: -0.03em; }
+.beitrag-liste { display: grid; gap: 14px; }
+.beitrag-karte a {
+  display: grid; gap: 10px; padding: 24px; border-radius: 16px; height: 100%;
+  background: var(--leinen); color: var(--tinte); text-decoration: none;
+  transition: transform 0.5s var(--ease), background 0.3s;
+}
+.beitrag-karte a:hover { transform: translateY(-4px); }
+.beitrag-karte a:active { transform: scale(0.99); }
+.beitrag-karte h3 { font-size: 1.35rem; }
+@media (min-width: 900px) {
+  .beitrag-liste { grid-template-columns: 5fr 4fr 4fr; align-items: start; }
+  .beitrag-karte:nth-child(2) { margin-top: 40px; }
+  .beitrag-karte:nth-child(3) { margin-top: 16px; }
+  main > .beitrag-liste { margin-top: 48px; }
+}
+.beitrag { max-width: 760px; padding-block: clamp(48px, 8vw, 112px) 0; display: grid; gap: 32px; }
+.beitrag-kopf { display: grid; gap: 20px; }
+.beitrag-kopf h1 { font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 500; letter-spacing: -0.035em; line-height: 1.02; }
+.beitrag-lead { font-size: 1.2rem; }
+.prosa { display: grid; gap: 20px; font-size: 1.1rem; }
+.prosa h2 { font-size: 1.7rem; margin-top: 20px; }
+.prosa h3 { font-size: 1.3rem; margin-top: 12px; }
+.prosa ul, .prosa ol { padding-left: 1.3em; display: grid; gap: 8px; max-width: 62ch; }
+.prosa ul { list-style: disc; }
+.prosa li::marker { color: var(--kaki); }
+.prosa blockquote {
+  margin: 12px 0; padding: 4px 0 4px 24px; border-left: 3px solid var(--kaki);
+  font: 500 1.4rem/1.3 var(--f-display); letter-spacing: -0.02em;
+}
+.prosa hr { border: 0; border-top: 1px solid var(--linie); width: 100%; }
+.prosa code { font-family: var(--f-mono); font-size: 0.9em; background: var(--leinen); padding: 1px 5px; border-radius: 4px; }
+.beitrag-fuss { display: flex; flex-wrap: wrap; gap: 28px; padding-top: 24px; border-top: 1px solid var(--linie); }
+
+/* ---------- Bewegung Stufe 8 ---------- */
+/* Fortschrittslinie oben, an den Scroll gekoppelt (nur wo der Browser Scroll-Timelines kann) */
+.fortschritt { display: none; }
+
+/* Gestaffeltes Einblenden: Kinder kommen nacheinander */
+.js .auf { transform: translateY(40px) scale(0.985); transition-duration: 1.1s; }
+.js .stapel > * { opacity: 0; transform: translateY(36px); transition: opacity 0.9s var(--ease), transform 1s var(--ease); }
+.js .stapel.da > * { opacity: 1; transform: none; }
+.js .stapel.da > :nth-child(2) { transition-delay: 0.08s; }
+.js .stapel.da > :nth-child(3) { transition-delay: 0.16s; }
+.js .stapel.da > :nth-child(4) { transition-delay: 0.24s; }
+.js .stapel.da > :nth-child(5) { transition-delay: 0.32s; }
+
+/* Auftakt der Startseite: Wörter steigen nacheinander auf */
+.js .hero .wort { display: inline-block; animation: wort-auf 1s var(--ease) both; animation-delay: var(--verz, 0s); }
+.js .hero .rollen li, .js .hero .hero-lead, .js .hero .aktionen { animation: auf 1s var(--ease) both; }
+.js .hero .rollen li:nth-child(1) { animation-delay: 0.05s; }
+.js .hero .rollen li:nth-child(2) { animation-delay: 0.12s; }
+.js .hero .rollen li:nth-child(3) { animation-delay: 0.19s; }
+.js .hero .hero-lead { animation-delay: 0.7s; }
+.js .hero .aktionen { animation-delay: 0.85s; }
+.js .atemkreis { animation: kreis-auf 1.6s var(--ease) 0.3s both; }
+@keyframes wort-auf { from { opacity: 0; transform: translateY(0.6em) rotate(2deg); } to { opacity: 1; transform: none; } }
+@keyframes auf { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@keyframes kreis-auf { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
+
+/* Magnetische Knöpfe: JS setzt nur translate */
+.knopf, .nav-kontakt, .download { transition-property: background, transform, translate; transition-duration: 0.3s, 0.4s, 0.5s; transition-timing-function: ease, var(--ease), var(--ease); }
+
+/* Bilder mit Parallax brauchen einen Rahmen, der den Überstand abschneidet */
+.bild-eck, .breitbild, .yoga-hero, .zitat-bild, .yoga-bild { overflow: hidden; }
+.bild-eck { border-radius: 140px 6px 6px 6px; }
+.breitbild-rechts { border-radius: 6px 160px 6px 6px; }
+.breitbild-links { border-radius: 6px 6px 6px 160px; }
+.yoga-hero { border-radius: 6px; }
+.zitat-bild { border-radius: 120px 6px 6px 6px; }
+.yoga-bild { border-radius: 6px 6px 200px 6px; }
+
+@supports (animation-timeline: view()) {
+  .fortschritt {
+    display: block; position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 60;
+    background: var(--kaki); transform-origin: left;
+    animation: wachsen linear both; animation-timeline: scroll(root);
+  }
+  @keyframes wachsen { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  .bild-eck img, .breitbild img, .yoga-hero img, .zitat-bild img, .yoga-bild img {
+    scale: 1.14;
+    animation: parallax linear both; animation-timeline: view();
+  }
+  @keyframes parallax { from { translate: 0 -6%; } to { translate: 0 6%; } }
+
+  .js .atemlinie path { transition: none; animation: zeichnen linear both; animation-timeline: view(); animation-range: entry 0% cover 60%; }
+  @keyframes zeichnen { from { stroke-dashoffset: 2600; } to { stroke-dashoffset: 0; } }
+
+  .flyer-bild { animation: flyer-dreh linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
+  @keyframes flyer-dreh { from { rotate: -6deg; translate: 0 40px; } to { rotate: 0deg; translate: 0 0; } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .stapel > *, .js .hero .wort, .js .hero .rollen li, .js .hero .hero-lead, .js .hero .aktionen,
+  .js .atemkreis { animation: none; opacity: 1; transform: none; transition: none; }
+  .fortschritt, .atemkreis, .flyer-bild,
+  .bild-eck img, .breitbild img, .yoga-hero img, .zitat-bild img, .yoga-bild img { animation: none; scale: none; translate: none; }
+  .js .atemlinie path { animation: none; stroke-dashoffset: 0; }
+  .flyer-bild { transform: none; }
+}
+
+/* Flyer auf schmalen Bildschirmen: kleineres Vorschaubild, lange Wörter trennen */
+.flyer-text h3 { hyphens: auto; overflow-wrap: break-word; }
+@media (max-width: 560px) {
+  .flyer { grid-template-columns: 96px minmax(0, 1fr); gap: 18px; align-items: start; }
+  .download { padding: 10px 16px; }
+}
+
+/* Über mich: ein ruhiges Bild statt Porträt */
+.ueber-bilder { padding-bottom: 0; overflow: hidden; border-radius: 6px 6px 6px 140px; }
+.ueber-bilder img { width: 100%; }
+
+/* Bildform: alle Fotos eckig, ohne Rundung */
+.bild-eck, .bild-eck img,
+.breitbild, .breitbild img, .breitbild-rechts img, .breitbild-links img,
+.yoga-hero, .yoga-hero img,
+.zitat-bild, .zitat-bild img,
+.yoga-bild, .yoga-bild img,
+.ueber-bilder, .ueber-bilder img { border-radius: 0; }
+
+/* Illustration bei Begleitung */
+.illu-gespraech svg { display: block; width: 100%; height: auto; }

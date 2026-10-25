@@ -4,18 +4,20 @@
 Website von Lola Dieber: Psychologin (M. Sc.), Psychotherapeutin in Ausbildung, Beraterin (ADHS, Gruppen, Konzepte), Dozentin, Yogalehrerin. Production-URL: TODO.
 
 ## Stack
-Statisches HTML/CSS/JS in `public/`, ausgeliefert von nginx-unprivileged. Keine Build-Tools, keine Abhängigkeiten.
+Statisches HTML/CSS/JS in `public/`, ausgeliefert von nginx-unprivileged. Beiträge: Markdown in `inhalte/beitraege/`, gebaut von `scripts/beitraege.mjs` (Node, ohne Abhängigkeiten) in der Docker-Stufe `build`.
 
 ## Commands
-- Install/Build: keine
+- Build: `node scripts/beitraege.mjs` (erzeugt `public/beitraege/`, gitignored, und die Vorschau zwischen `BEITRAEGE:START/ENDE` in `index.html`)
 - Dev server: `python3 -m http.server 8080 --bind 0.0.0.0 -d public`
-- Tests: keine eigenen; CI prüft axe und Lighthouse
+- Tests: `node scripts/beitraege.mjs --pruefen` (Docker-Stufe `test`); CI prüft axe und Lighthouse
 
 ## Layout
 - `public/index.html`: One-Pager (Begleitung, Beratung, Lehre, Yoga, Über mich, Kontakt)
 - `public/css/stil.css`: Farb-Tokens (Salbeinebel, Tannentinte, Kaki), Light/Dark
 - `public/fonts/`: selbst gehostete Schriften (DSGVO, kein Google-CDN)
 - `public/bilder/`: bearbeitete Fotos
+- `public/downloads/`: Flyer als PDF
+- `inhalte/beitraege/`: Beiträge, `_vorlage.md` erklärt das Format
 
 ## CI and deploy contract
 `.github/workflows/ci.yml` is a thin caller of the shared pipeline in `seitenschwung/template`,
@@ -43,5 +45,7 @@ managed by the owner. You can't change workflow files, so build the project to f
 ## Conventions
 - UI-Sprache Deutsch, Anrede „Sie“.
 - Keine externen Ressourcen (CSP in `nginx.conf` erlaubt nur `'self'`), keine Inline-Styles/-Skripte.
-- Kaki `#C9532A` nur für Flächen und große Schrift; für kleinen Text `#A6421F` (nicht auf Malve).
+- Kaki `#C9532A` nur für Flächen und große Schrift; für kleinen Text `#A6421F` (nicht auf Lehm).
+- Keine Inline-`style`-Attribute (CSP); Verzögerungen über `:nth-child` oder per JS `style.setProperty`.
+- Bewegung Stufe 8: Scroll-Effekte nur über CSS `animation-timeline`, nie Scroll-Listener; `prefers-reduced-motion` schaltet alles ab.
 - Beratung ist keine Heilbehandlung: keine Formulierungen wie „Therapie anbieten“.

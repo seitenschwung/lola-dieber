@@ -9,3 +9,5 @@ playwright-report/
 .env.*
 !.env.example
 .DS_Store
+# Wird beim Build aus inhalte/beitraege erzeugt
+public/beitraege/

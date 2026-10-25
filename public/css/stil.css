@@ -319,18 +319,43 @@ a:hover { text-decoration-thickness: 2px; }
 /* ---------- Yoga ---------- */
 .yoga-bild img { border-radius: 6px 6px 200px 6px; }
 
+/* ---------- Breite Bilder (Beratung, Lehre, Yoga) ---------- */
+figure { margin: 0; }
+.breitbild img { width: 100%; border-radius: 6px; }
+.breitbild-rechts { margin-bottom: clamp(48px, 7vw, 88px); }
+.breitbild-links { margin-top: clamp(48px, 7vw, 88px); }
+.breitbild-rechts img { border-radius: 6px 160px 6px 6px; }
+.breitbild-links img { border-radius: 6px 6px 6px 160px; }
+.yoga-hero { margin-bottom: clamp(48px, 7vw, 88px); }
+.yoga-hero img { width: 100%; border-radius: 6px; }
+@media (min-width: 900px) {
+  .breitbild-rechts { margin-left: 42%; }
+  .breitbild-links { margin-right: 36%; }
+  .yoga-hero { margin-left: 12%; }
+}
+
 /* ---------- Zitat ---------- */
-.zitat { display: grid; gap: 24px; }
+.zitat-reihe { display: grid; gap: 40px; align-items: center; }
 .zitat blockquote {
   margin: 0; font: 500 clamp(1.7rem, 3.6vw, 3rem)/1.15 var(--f-display);
   letter-spacing: -0.03em; text-wrap: balance; max-width: 24ch;
 }
-@media (min-width: 900px) { .zitat { padding-left: 25%; } }
+.zitat-bild img { width: 100%; border-radius: 120px 6px 6px 6px; }
+@media (min-width: 900px) {
+  .zitat-reihe { grid-template-columns: 6fr 5fr; gap: 72px; }
+  .zitat { padding-left: 8%; }
+}
 
 /* ---------- Über mich ---------- */
 .ueber { display: grid; gap: 48px; }
-.ueber-bild { max-width: 420px; }
+.ueber-bilder { position: relative; max-width: 420px; padding-bottom: 72px; }
 .ueber-bild img { border-radius: 6px; }
+.ueber-bild-klein {
+  position: absolute; right: -12%; bottom: 0; width: 46%;
+  border: 6px solid var(--papier); border-radius: 12px; overflow: hidden;
+}
+.ueber-bild-klein img { width: 100%; }
+@media (max-width: 560px) { .ueber-bild-klein { right: 0; } }
 .qualis { border-top: 1px solid var(--linie); }
 .qualis li { padding: 16px 0; border-bottom: 1px solid var(--linie); display: grid; gap: 2px; }
 .qualis b { font-weight: 600; }
@@ -384,3 +409,6 @@ a:hover { text-decoration-thickness: 2px; }
   .js .atemlinie path { stroke-dashoffset: 0; transition: none; }
   *, *::before, *::after { transition-duration: 0s !important; }
 }
+
+/* Auf dem Handy reicht ein Yoga-Bild */
+@media (max-width: 899px) { .yoga-bild { display: none; } }

@@ -1,24 +1,287 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Project template demo</title>
-  <meta name="description" content="Demo page of the project template. It passes the pipeline checks and is meant to be replaced.">
+  <title>Lola Dieber · Psychologin, Beraterin, Dozentin und Yogalehrerin</title>
+  <meta name="description" content="Lola Dieber, Psychologin (M. Sc.) und Psychotherapeutin in Ausbildung: psychologische Begleitung, Beratung zu ADHS, Gruppen und Konzepten, Lehre in Psychologie und Yoga.">
+  <meta name="theme-color" content="#EDEFE8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#18201C" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lola Dieber · Psychologie, Beratung, Lehre, Yoga">
+  <meta property="og:description" content="Psychologische Begleitung, ADHS-Beratung, Lehre und Yoga. Fachlich fundiert und zugewandt.">
+  <meta property="og:locale" content="de_DE">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <style>
-    body { margin: 0; font: 1.125rem/1.6 system-ui, sans-serif; color: #1b1b1b; background: #fff; }
-    main { max-width: 40rem; margin: 0 auto; padding: 3rem 1.25rem; }
-    h1 { line-height: 1.2; }
-    a { color: #0b4f9c; }
-  </style>
+  <link rel="preload" href="/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/stil.css">
+  <script src="/js/seite.js" defer></script>
 </head>
 <body>
-  <main>
-    <h1>Project template demo</h1>
-    <p>This page is the demo content of the template. It is a working example of the deploy
-       contract: port 8080, <code>/healthz</code> and <code>/version.txt</code>.</p>
-    <p>Replace this site with the real project. The pipeline keeps checking it the same way.</p>
+  <a class="skip" href="#inhalt">Zum Inhalt springen</a>
+
+  <header class="kopf">
+    <div class="wrap kopf-innen">
+      <a class="logo" href="/" aria-label="Lola Dieber, zur Startseite"><span class="logo-punkt" aria-hidden="true"></span>Lola Dieber</a>
+      <button class="menue-knopf" type="button" aria-expanded="false" aria-controls="hauptnav">
+        <span class="menue-strich" aria-hidden="true"></span>Menü
+      </button>
+      <nav class="nav" id="hauptnav" aria-label="Hauptnavigation">
+        <ul>
+          <li><a href="#begleitung">Begleitung</a></li>
+          <li><a href="#beratung">Beratung</a></li>
+          <li><a href="#lehre">Lehre</a></li>
+          <li><a href="#yoga">Yoga</a></li>
+          <li><a href="#ueber-mich">Über mich</a></li>
+          <li><a class="nav-kontakt" href="#kontakt">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inhalt">
+    <div class="wrap">
+      <section class="hero" aria-labelledby="titel">
+        <div class="hero-text">
+          <ul class="rollen" aria-label="Qualifikationen">
+            <li>Psychologin M.&nbsp;Sc.</li>
+            <li>Psychotherapeutin in Ausbildung</li>
+            <li>Yogalehrerin</li>
+          </ul>
+          <h1 id="titel">Raum für Gedanken, die <span class="akzent">Umwege</span> nehmen.</h1>
+          <p class="hero-lead leise">Psychologische Begleitung, Beratung zu ADHS, Lehre und Yoga. Fachlich fundiert, zugewandt und mit Blick auf den ganzen Menschen.</p>
+          <div class="aktionen">
+            <a class="knopf" href="#kontakt">Erstgespräch anfragen</a>
+            <a class="textlink" href="#angebote">Angebote ansehen</a>
+          </div>
+        </div>
+        <div class="hero-bild">
+          <picture>
+            <source srcset="/bilder/lola-portrait.webp" type="image/webp">
+            <img src="/bilder/lola-portrait.jpg" width="915" height="1145" alt="Porträt von Lola Dieber mit runder Brille, lächelnd" fetchpriority="high">
+          </picture>
+          <span class="atem" aria-hidden="true"><span class="atem-punkt"></span>einatmen · ausatmen</span>
+        </div>
+      </section>
+    </div>
+
+    <svg class="atemlinie" viewBox="0 0 1240 140" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M0 70 C 90 70, 120 20, 190 30 S 260 120, 330 96 S 360 18, 420 40 C 470 58, 450 118, 520 110 C 600 100, 580 30, 660 52 C 720 68, 760 92, 840 80 C 920 70, 980 72, 1060 71 C 1130 70, 1190 70, 1240 70"/>
+    </svg>
+
+    <div class="wrap">
+      <section class="sektion" id="angebote" aria-labelledby="t-angebote">
+        <div class="sektion-kopf">
+          <p class="label">Angebote</p>
+          <h2 id="t-angebote">Vier Räume, eine Haltung.</h2>
+        </div>
+        <div class="raeume auf">
+          <a class="raum" href="#begleitung">
+            <span class="mono">Raum 1 · Einzelne</span>
+            <h3>Psychologische Begleitung</h3>
+            <span class="leise">Für Menschen in Umbruchphasen, bei Stress und Erschöpfung.</span>
+            <span class="raum-pfeil" aria-hidden="true">Mehr erfahren →</span>
+          </a>
+          <a class="raum" href="#beratung">
+            <span class="mono">Raum 2 · Beratung</span>
+            <h3>ADHS, Gruppen, Konzepte</h3>
+            <span class="leise">Für Betroffene, Angehörige, Teams und Einrichtungen.</span>
+            <span class="raum-pfeil" aria-hidden="true">Mehr erfahren →</span>
+          </a>
+          <a class="raum" href="#lehre">
+            <span class="mono">Raum 3 · Lehre</span>
+            <h3>Dozentin für Psychologie</h3>
+            <span class="leise">Für Hochschulen, Fachschulen und Fortbildungen.</span>
+            <span class="raum-pfeil" aria-hidden="true">Mehr erfahren →</span>
+          </a>
+          <a class="raum" href="#yoga">
+            <span class="mono">Raum 4 · Matte</span>
+            <h3>Yoga</h3>
+            <span class="leise">Kurse, Workshops und Einzelstunden.</span>
+            <span class="raum-pfeil" aria-hidden="true">Mehr erfahren →</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="sektion" id="begleitung" aria-labelledby="t-begleitung">
+        <div class="sektion-kopf">
+          <p class="label">Raum 1 · Begleitung</p>
+          <h2 id="t-begleitung">Wenn es gerade zu viel ist.</h2>
+        </div>
+        <div class="zweispalter auf">
+          <div class="zweispalter-text">
+            <p>Manchmal geraten Dinge ins Rutschen: ein Jobwechsel, eine Trennung, anhaltender Stress oder das Gefühl, sich selbst aus dem Blick verloren zu haben. In der psychologischen Begleitung schauen wir gemeinsam auf das, was Sie gerade beschäftigt, und entwickeln Schritte, die in Ihren Alltag passen.</p>
+            <p class="leise">Ich arbeite wissenschaftlich fundiert und lösungsorientiert. Körperwahrnehmung und Atem beziehe ich ein, wenn es Ihnen hilft.</p>
+            <ul class="fakten">
+              <li><span class="label">Erstgespräch</span><span>50 Minuten zum Kennenlernen und Klären Ihres Anliegens</span></li>
+              <li><span class="label">Sitzungen</span><span>50 Minuten, in Präsenz oder online per Video</span></li>
+              <li><span class="label">Kosten</span><span>Selbstzahlung, Honorar auf Anfrage</span></li>
+            </ul>
+            <div class="hinweis">
+              <span class="label">Gut zu wissen</span>
+              <p>Psychologische Beratung ist keine Psychotherapie und ersetzt keine ärztliche oder psychotherapeutische Behandlung. Wenn sich im Gespräch zeigt, dass eine Therapie sinnvoll ist, unterstütze ich Sie bei der Suche.</p>
+            </div>
+          </div>
+          <figure class="bild-eck" aria-hidden="true">
+            <picture>
+              <source srcset="/bilder/lola-nachdenklich.webp" type="image/webp">
+              <img src="/bilder/lola-nachdenklich.jpg" width="900" height="1200" alt="" loading="lazy">
+            </picture>
+          </figure>
+        </div>
+      </section>
+    </div>
+
+    <div class="band malve">
+      <div class="wrap">
+        <section class="sektion" id="beratung" aria-labelledby="t-beratung">
+          <div class="sektion-kopf">
+            <p class="label">Raum 2 · Beratung</p>
+            <h2 id="t-beratung">ADHS verstehen. Gruppen stärken. Konzepte, die tragen.</h2>
+          </div>
+          <div class="felder auf">
+            <article class="feld">
+              <h3>ADHS-Beratung</h3>
+              <p>Für Erwachsene mit ADHS oder Verdacht darauf, für Eltern und Angehörige. Wir sortieren, was hinter Aufschieben, Reizüberflutung oder innerer Unruhe steckt, und finden Strategien, die zu Ihrem Kopf passen statt gegen ihn zu arbeiten.</p>
+              <ul class="stichworte" aria-label="Themen">
+                <li>Psychoedukation</li><li>Selbstorganisation</li><li>Angehörige</li>
+              </ul>
+            </article>
+            <article class="feld">
+              <h3>Gruppenangebote</h3>
+              <p>Moderierte Gruppen zu Themen wie Stressbewältigung, Selbstfürsorge oder dem Leben mit ADHS. Austausch auf Augenhöhe, mit klarer Struktur und fachlichem Input.</p>
+              <ul class="stichworte" aria-label="Formate">
+                <li>Offene Gruppen</li><li>Kursreihen</li><li>Workshops</li>
+              </ul>
+            </article>
+            <article class="feld">
+              <h3>Konzeptentwicklung</h3>
+              <p>Für Einrichtungen, Vereine und Teams: Ich entwickle psychologisch fundierte Konzepte für Gruppenangebote, Prävention und den Umgang mit neurodivergenten Menschen.</p>
+              <ul class="stichworte" aria-label="Zielgruppen">
+                <li>Soziale Träger</li><li>Schulen</li><li>Unternehmen</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section class="sektion" id="lehre" aria-labelledby="t-lehre">
+        <div class="sektion-kopf">
+          <p class="label">Raum 3 · Lehre</p>
+          <h2 id="t-lehre">Psychologie, die im Kopf bleibt.</h2>
+        </div>
+        <div class="lehre auf">
+          <p class="lehre-satz">Ich unterrichte so, wie ich berate: <span class="akzent">anschaulich</span>, mit Beispielen aus der Praxis und Zeit für Fragen.</p>
+          <div class="lehre-rechts">
+            <ul class="themen" aria-label="Lehrthemen">
+              <li><span>Klinische Psychologie</span><span class="mono leise">Grundlagen</span></li>
+              <li><span>Entwicklungspsychologie</span><span class="mono leise">Lebensspanne</span></li>
+              <li><span>ADHS und Neurodiversität</span><span class="mono leise">Schwerpunkt</span></li>
+              <li><span>Gesprächsführung</span><span class="mono leise">Methoden</span></li>
+              <li><span>Stress und Resilienz</span><span class="mono leise">Prävention</span></li>
+            </ul>
+            <p class="leise">Für Hochschulen, Fach- und Berufsschulen sowie Fortbildungen. Einzeltermine oder Semesterformate.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sektion" id="yoga" aria-labelledby="t-yoga">
+        <div class="sektion-kopf">
+          <p class="label">Raum 4 · Matte</p>
+          <h2 id="t-yoga">Yoga, das den Kopf leiser macht.</h2>
+        </div>
+        <div class="zweispalter gespiegelt auf">
+          <figure class="yoga-bild" aria-hidden="true">
+            <picture>
+              <source srcset="/bilder/lola-mate-steg.webp" type="image/webp">
+              <img src="/bilder/lola-mate-steg.jpg" width="1000" height="1250" alt="" loading="lazy">
+            </picture>
+          </figure>
+          <div class="zweispalter-text">
+            <p>Meine Stunden verbinden ruhige Bewegung, Atem und Entspannung. Ohne Leistungsdruck und ohne akrobatische Posen. Geeignet für Einsteiger:innen und alle, die nach einem vollen Tag wieder bei sich ankommen möchten.</p>
+            <ul class="fakten">
+              <li><span class="label">Kurse</span><span>Fortlaufende Gruppen, 75 Minuten</span></li>
+              <li><span class="label">Einzelstunden</span><span>Individuell abgestimmt, auch online</span></li>
+              <li><span class="label">Workshops</span><span>Yoga und Stressregulation für Teams</span></li>
+            </ul>
+            <p class="leise">Aktuelle Kurszeiten und Orte erfahren Sie auf Anfrage.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="band">
+      <div class="wrap">
+        <figure class="zitat auf">
+          <blockquote><p>Gedanken dürfen Umwege nehmen. <span class="akzent">Am Ende kommt man an.</span></p></blockquote>
+        </figure>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section class="sektion" id="ueber-mich" aria-labelledby="t-ueber">
+        <div class="sektion-kopf">
+          <p class="label">Über mich</p>
+          <h2 id="t-ueber">Hallo, ich bin Lola.</h2>
+        </div>
+        <div class="ueber auf">
+          <figure class="ueber-bild">
+            <picture>
+              <source srcset="/bilder/lola-portrait-duoton.webp" type="image/webp">
+              <img src="/bilder/lola-portrait-duoton.jpg" width="915" height="1145" alt="Lola Dieber in Schwarz-Weiß, lächelnd" loading="lazy">
+            </picture>
+          </figure>
+          <div class="ueber-text">
+            <p>Ich bin Psychologin und mache meine Ausbildung zur Psychologischen Psychotherapeutin. Außerdem unterrichte ich Yoga. Beides zusammen prägt meine Arbeit: der wissenschaftliche Blick auf das, was in uns passiert, und das Wissen, dass Veränderung auch über den Körper geht.</p>
+            <p class="leise">Besonders am Herzen liegt mir das Thema ADHS. Ich erlebe immer wieder, wie entlastend es ist, die eigene Art zu denken zu verstehen, statt gegen sie anzukämpfen.</p>
+            <ul class="qualis" aria-label="Qualifikationen">
+              <li><b>Psychologin (M.&nbsp;Sc.)</b><span class="leise">Studium der Psychologie</span></li>
+              <li><b>Psychotherapeutin in Ausbildung</b><span class="leise">Ausbildung zur Psychologischen Psychotherapeutin</span></li>
+              <li><b>Yogalehrerin</b><span class="leise">Zertifizierte Yogalehrerin</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <svg class="atemlinie" viewBox="0 0 1240 60" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M0 30 C 200 34, 400 26, 620 30 S 1040 30, 1240 30"/>
+    </svg>
+
+    <div class="wrap">
+      <section class="sektion kontakt" id="kontakt" aria-labelledby="t-kontakt">
+        <div>
+          <p class="label">Kontakt</p>
+          <h2 id="t-kontakt">Lassen Sie uns <span class="akzent">sprechen</span>.</h2>
+        </div>
+        <div class="auf">
+          <p class="leise">Schreiben Sie mir kurz, worum es geht und welches Angebot Sie interessiert. Ich melde mich mit einem Terminvorschlag für ein Erstgespräch.</p>
+          <ul class="kontakt-wege">
+            <li>
+              <span class="label">E-Mail</span>
+              <a href="mailto:kontakt@lola-dieber.de" id="mail">kontakt@lola-dieber.de</a>
+              <button class="kopieren" type="button" data-kopieren="kontakt@lola-dieber.de">Adresse kopieren</button>
+            </li>
+            <li>
+              <span class="label">Ort</span>
+              <span>Praxisräume und online per Video</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
   </main>
+
+  <footer class="fuss">
+    <div class="wrap fuss-innen">
+      <span>© 2026 Lola Dieber</span>
+      <ul>
+        <li><a href="/impressum.html">Impressum</a></li>
+        <li><a href="/datenschutz.html">Datenschutz</a></li>
+      </ul>
+    </div>
+  </footer>
 </body>
 </html>

@@ -14,8 +14,8 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/css/stil.css?v=3">
-  <script src="/js/seite.js?v=3" defer></script>
+  <link rel="stylesheet" href="/css/stil.css?v=6">
+  <script src="/js/seite.js?v=6" defer></script>
 </head>
 <body>
   <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -59,9 +59,19 @@
         </div>
         <div class="atemkreis" aria-hidden="true">
           <span class="atemkreis-form"></span>
-          <span class="atem-wort atem-ein">einatmen</span>
-          <span class="atem-wort atem-aus">ausatmen</span>
-          <span class="atem-zahl" hidden></span>
+          <svg class="atem-figur" viewBox="50 36 160 140" focusable="false">
+            <path d="M92 170 C88 150 62 140 60 106 C58 70 84 46 116 48 C140 50 154 66 154 86 C154 92 156 96 160 104 L166 114 C167 117 164 119 159 119 C160 124 158 128 154 129 C156 133 154 137 150 138 C148 146 142 150 132 150 L128 170"/>
+            <g class="luft luft-ein">
+              <path d="M176 104 q6 -5 12 0 t12 0"/>
+              <path d="M180 117 q6 -5 12 0 t12 0"/>
+              <path d="M176 130 q6 -5 12 0 t12 0"/>
+            </g>
+            <g class="luft luft-aus">
+              <path d="M176 104 q6 -5 12 0 t12 0"/>
+              <path d="M180 117 q6 -5 12 0 t12 0"/>
+              <path d="M176 130 q6 -5 12 0 t12 0"/>
+            </g>
+          </svg>
         </div>
       </section>
     </div>
@@ -380,9 +390,6 @@
       </section>
     </div>
 
-    <svg class="atemlinie" viewBox="0 0 1240 60" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="M0 30 C 200 34, 400 26, 620 30 S 1040 30, 1240 30"/>
-    </svg>
 
     <div class="wrap">
       <section class="sektion kontakt" id="kontakt" aria-labelledby="t-kontakt">

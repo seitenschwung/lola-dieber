@@ -179,7 +179,7 @@ a:hover { text-decoration-thickness: 2px; }
 }
 
 /* ---------- Hero ---------- */
-.hero { display: grid; gap: 48px; padding-block: clamp(40px, 7vw, 96px) clamp(56px, 8vw, 112px); }
+.hero { display: grid; gap: 48px; padding-block: clamp(20px, 3.5vw, 56px) clamp(56px, 8vw, 112px); }
 .hero-text { display: grid; gap: 28px; align-content: start; }
 /* Qualifikationen: ruhiger Block in der Displayschrift mit feiner Kaki-Linie, wie ein Briefkopf */
 .rollen {
@@ -211,7 +211,8 @@ a:hover { text-decoration-thickness: 2px; }
   transition: color 0.3s;
 }
 .textlink:hover { color: var(--kaki-text); }
-/* Atemkreis: 8 s einatmen (Kreis wächst), 8 s ausatmen (Kreis schrumpft), Wort wechselt mit */
+/* Atemkreis: 8 s einatmen (Kreis wächst), 3 s halten, 8 s ausatmen (Kreis schrumpft); 19 s je Runde.
+   In der Mitte ein Kopf im Profil, die Luftlinien strömen zur Nase hin oder von ihr weg. */
 .atemkreis {
   position: relative; width: min(100%, 520px); aspect-ratio: 1; justify-self: center;
   display: grid; place-items: center;
@@ -219,33 +220,34 @@ a:hover { text-decoration-thickness: 2px; }
 .atemkreis-form {
   position: absolute; inset: 0; border-radius: 50%; background: var(--kaki);
   transform: scale(0.55);
-  animation: atem-kreis 16s ease-in-out infinite;
+  animation: atem-kreis 19s ease-in-out infinite;
 }
 @keyframes atem-kreis {
   0%, 100% { transform: scale(0.55); }
-  50% { transform: scale(1); }
+  42.105%, 57.895% { transform: scale(1); }
 }
-.atem-wort {
-  grid-area: 1 / 1; position: relative;
-  font: 500 clamp(1.6rem, 3.2vw, 2.4rem) / 1 var(--f-display); letter-spacing: -0.02em;
-  color: var(--papier);
+.atem-figur { grid-area: 1 / 1; position: relative; width: 42%; height: auto; overflow: visible; }
+.atem-figur path {
+  fill: none; stroke: var(--papier); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round;
 }
-.atem-ein { animation: atem-ein 16s ease-in-out infinite; }
-.atem-aus { animation: atem-aus 16s ease-in-out infinite; }
-.atem-zahl {
-  grid-area: 1 / 1; position: relative; transform: translateY(1.7em);
-  font: 500 clamp(1.5rem, 2.2vw, 1.9rem) / 1 var(--f-mono); font-variant-numeric: tabular-nums;
-  color: var(--papier);
+.luft { opacity: 0; }
+.luft-ein { animation: luft-ein 19s linear infinite; }
+.luft-aus { animation: luft-aus 19s linear infinite; }
+@keyframes luft-ein {
+  0% { opacity: 0; transform: translateX(34px); }
+  5% { opacity: 1; }
+  38% { opacity: 1; transform: translateX(4px); }
+  42.105%, 100% { opacity: 0; transform: translateX(0); }
 }
-@keyframes atem-ein {
-  0% { opacity: 0; } 4%, 46% { opacity: 1; } 50%, 100% { opacity: 0; }
-}
-@keyframes atem-aus {
-  0%, 50% { opacity: 0; } 54%, 96% { opacity: 1; } 100% { opacity: 0; }
+@keyframes luft-aus {
+  0%, 57.895% { opacity: 0; transform: translateX(0); }
+  62% { opacity: 1; transform: translateX(4px); }
+  95% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(38px); }
 }
 @media (min-width: 900px) {
   .hero { grid-template-columns: 7fr 5fr; gap: 32px; }
-  .hero-text { padding-left: 4vw; padding-top: 48px; }
+  .hero-text { padding-left: 4vw; padding-top: 24px; }
   .atemkreis { justify-self: end; }
 }
 
@@ -427,9 +429,9 @@ figure { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .atemkreis-form { animation: none; transform: scale(0.8); }
-  .atem-ein, .atem-aus { animation: none; opacity: 1; }
-  .atem-ein { transform: translateY(-0.7em); }
-  .atem-aus { transform: translateY(0.7em); }
+  .luft-ein { animation: none; opacity: 0; }
+  .luft-aus { animation: none; opacity: 0.8; transform: translateX(10px); }
+  .faden-pfad { animation: none !important; stroke-dashoffset: 0 !important; }
   .js .auf { opacity: 1; transform: none; transition: none; }
   .js .atemlinie path { stroke-dashoffset: 0; transition: none; }
   *, *::before, *::after { transition-duration: 0s !important; }
@@ -592,3 +594,19 @@ figure { margin: 0; }
 
 /* Illustration bei Begleitung */
 .illu-gespraech svg { display: block; width: 100%; height: auto; }
+
+/* Roter Faden: hängt links durch alle Sektionen, wird beim Scrollen gezogen (Pfad baut seite.js) */
+.faden-svg { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 3; overflow: visible; }
+.faden-pfad {
+  fill: none; stroke: var(--kaki); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+}
+@supports (animation-timeline: scroll()) {
+  .faden-pfad {
+    stroke-dasharray: 1 1;
+    animation: faden-ziehen linear both; animation-timeline: scroll(root);
+  }
+  @keyframes faden-ziehen {
+    from { stroke-dashoffset: calc(1 - var(--faden-start, 0.05)); }
+    to { stroke-dashoffset: 0; }
+  }
+}

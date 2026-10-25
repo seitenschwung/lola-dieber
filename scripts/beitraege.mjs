@@ -100,8 +100,8 @@ function seite({ titel, beschreibung, inhalt, tiefe }) {
   <title>${esc(titel)} · Lola Dieber</title>
   <meta name="description" content="${esc(beschreibung)}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/css/stil.css?v=3">
-  <script src="/js/seite.js?v=3" defer></script>
+  <link rel="stylesheet" href="/css/stil.css?v=6">
+  <script src="/js/seite.js?v=6" defer></script>
 </head>
 <body>
   <a class="skip" href="#inhalt">Zum Inhalt springen</a>

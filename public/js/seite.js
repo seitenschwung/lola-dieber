@@ -1,4 +1,4 @@
-// Menü, Einblenden, Auftakt, magnetische Knöpfe und Kopieren.
+// Menü, Einblenden, Auftakt, roter Faden, magnetische Knöpfe und Kopieren.
 // Ohne JS bleibt alles sichtbar und bedienbar. Kein Scroll-Listener: Sichtbarkeit über IntersectionObserver,
 // Scroll-Effekte laufen in CSS (animation-timeline).
 (function () {
@@ -88,20 +88,66 @@
       });
     }
 
-    // Sekundenzähler im Atemkreis, synchron zur CSS-Animation (16 s: 8 ein, 8 aus)
-    var zahl = document.querySelector('.atem-zahl');
-    var form = document.querySelector('.atemkreis-form');
-    var atemAnim = form && form.getAnimations ? form.getAnimations()[0] : null;
-    if (zahl && atemAnim && !ruhig) {
-      zahl.hidden = false;
-      var letzte = -1;
-      var zaehlen = function () {
-        var t = Number(atemAnim.currentTime) || 0;
-        var sek = Math.floor((t % 16000) / 1000) % 8 + 1;
-        if (sek !== letzte) { zahl.textContent = sek; letzte = sek; }
+    // Roter Faden: hängt vom linken Ende der Atemlinie durch alle Sektionen bis zum Kontakt
+    var startLinie = document.querySelector('main > .atemlinie');
+    var kontakt = document.getElementById('kontakt');
+    var hero = document.querySelector('.hero');
+    if (startLinie && kontakt && hero && 'ResizeObserver' in window) {
+      var NS = 'http://www.w3.org/2000/svg';
+      var fadenSvg = document.createElementNS(NS, 'svg');
+      fadenSvg.setAttribute('class', 'faden-svg');
+      fadenSvg.setAttribute('aria-hidden', 'true');
+      fadenSvg.setAttribute('focusable', 'false');
+      var fadenPfad = document.createElementNS(NS, 'path');
+      fadenPfad.setAttribute('class', 'faden-pfad');
+      fadenPfad.setAttribute('pathLength', '1');
+      fadenSvg.appendChild(fadenPfad);
+      document.body.appendChild(fadenSvg);
+      var marken = ['#angebote', '#begleitung', '.band.lehm', '#lehre', '#yoga', '#wissen', '#ueber-mich'];
+      var fadenZeichnen = function () {
+        var sy = window.scrollY;
+        var oben = function (el) { return el.getBoundingClientRect().top + sy; };
+        var r = startLinie.getBoundingClientRect();
+        var y0 = r.top + sy + r.height * 0.5;
+        var x = Math.max(8, Math.round(hero.getBoundingClientRect().left * 0.5));
+        var k = x < 30 ? 0.45 : 1;
+        var ende = oben(kontakt) - 20;
+        var d = 'M 0 ' + y0 + ' C ' + (x * 0.6) + ' ' + y0 + ', ' + x + ' ' + (y0 + 16) + ', ' + x + ' ' + (y0 + 60);
+        var y = y0 + 60;
+        var seite = 1;
+        marken.forEach(function (sel) {
+          var el = document.querySelector(sel);
+          if (!el) return;
+          var L = oben(el) + (sel === '.band.lehm' ? 0 : 40);
+          if (L < y + 80 || L > ende - 80) return;
+          var amp = 10 * k * seite;
+          seite = -seite;
+          d += ' C ' + (x + amp) + ' ' + (y + (L - y) / 3) + ', ' + (x - amp) + ' ' + (y + 2 * (L - y) / 3) + ', ' + x + ' ' + (L - 30 * k);
+          d += ' C ' + x + ' ' + (L - 6 * k) + ', ' + (x + 30 * k) + ' ' + (L + 8 * k) + ', ' + (x + 22 * k) + ' ' + (L - 14 * k);
+          d += ' C ' + (x + 14 * k) + ' ' + (L - 30 * k) + ', ' + (x - 16 * k) + ' ' + (L - 4 * k) + ', ' + x + ' ' + (L + 22 * k);
+          y = L + 22 * k;
+        });
+        d += ' C ' + (x + 8 * k) + ' ' + (y + (ende - y) / 3) + ', ' + (x - 8 * k) + ' ' + (y + 2 * (ende - y) / 3) + ', ' + x + ' ' + ende;
+        // Am Ende ein kleiner Knoten: der Faden ist gefunden
+        d += ' C ' + x + ' ' + (ende + 14 * k) + ', ' + (x + 18 * k) + ' ' + (ende + 20 * k) + ', ' + (x + 16 * k) + ' ' + (ende + 4 * k);
+        d += ' C ' + (x + 14 * k) + ' ' + (ende - 10 * k) + ', ' + (x - 6 * k) + ' ' + (ende - 4 * k) + ', ' + x + ' ' + (ende + 10 * k);
+        d += ' C ' + (x + 4 * k) + ' ' + (ende + 22 * k) + ', ' + (x + 10 * k) + ' ' + (ende + 30 * k) + ', ' + (x + 6 * k) + ' ' + (ende + 38 * k);
+        var w = document.documentElement.clientWidth;
+        var h = Math.round(ende + 60);
+        fadenSvg.setAttribute('width', w);
+        fadenSvg.setAttribute('height', h);
+        fadenSvg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        fadenPfad.setAttribute('d', d);
+        // Beim Laden ist der Faden schon bis etwa zum unteren Bildrand gezogen
+        var start = (window.innerHeight * 0.85 - y0) / Math.max(1, ende - y0);
+        fadenSvg.style.setProperty('--faden-start', Math.min(0.5, Math.max(0.02, start)).toFixed(3));
       };
-      zaehlen();
-      setInterval(zaehlen, 200);
+      var fadenBild = 0;
+      fadenZeichnen();
+      new ResizeObserver(function () {
+        cancelAnimationFrame(fadenBild);
+        fadenBild = requestAnimationFrame(fadenZeichnen);
+      }).observe(document.body);
     }
 
     root.classList.add('js');

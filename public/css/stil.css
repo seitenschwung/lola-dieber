@@ -211,11 +211,15 @@ a:hover { text-decoration-thickness: 2px; }
   transition: color 0.3s;
 }
 .textlink:hover { color: var(--kaki-text); }
-/* Atemkreis: 8 s einatmen (Kreis wächst), 3 s halten, 8 s ausatmen (Kreis schrumpft); 19 s je Runde.
-   In der Mitte ein Kopf im Profil, die Luftlinien strömen zur Nase hin oder von ihr weg. */
-.atemkreis {
-  position: relative; width: min(100%, 520px); aspect-ratio: 1; justify-self: center;
-  display: grid; place-items: center;
+/* Atemkreis: 8 s einatmen (Kreis wächst bis zum Ring), 3 s halten, 8 s ausatmen (Kreis schrumpft); 19 s je Runde.
+   Die Taktzeile darunter hebt im selben Takt „ein“, „halten“ oder „aus“ hervor. */
+.atem {
+  width: min(100%, 520px); justify-self: center;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.atemkreis { position: relative; width: 100%; aspect-ratio: 1; }
+.atemkreis-ring {
+  position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid var(--kaki);
 }
 .atemkreis-form {
   position: absolute; inset: 0; border-radius: 50%; background: var(--kaki);
@@ -226,29 +230,32 @@ a:hover { text-decoration-thickness: 2px; }
   0%, 100% { transform: scale(0.55); }
   42.105%, 57.895% { transform: scale(1); }
 }
-.atem-figur { grid-area: 1 / 1; position: relative; width: 42%; height: auto; overflow: visible; }
-.atem-figur path {
-  fill: none; stroke: var(--papier); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round;
+.atem-takt {
+  margin: 0; font-family: var(--f-mono); font-size: 0.9rem; letter-spacing: 0.02em;
+  color: var(--tinte-leise);
 }
-.luft { opacity: 0; }
-.luft-ein { animation: luft-ein 19s linear infinite; }
-.luft-aus { animation: luft-aus 19s linear infinite; }
-@keyframes luft-ein {
-  0% { opacity: 0; transform: translateX(34px); }
-  5% { opacity: 1; }
-  38% { opacity: 1; transform: translateX(4px); }
-  42.105%, 100% { opacity: 0; transform: translateX(0); }
+.takt { animation: 19s linear infinite; }
+.takt-ein { animation-name: takt-ein; }
+.takt-halten { animation-name: takt-halten; }
+.takt-aus { animation-name: takt-aus; }
+@keyframes takt-ein {
+  0%, 40.5% { color: var(--kaki-text); font-weight: 500; }
+  42.105%, 100% { color: var(--tinte-leise); font-weight: 400; }
 }
-@keyframes luft-aus {
-  0%, 57.895% { opacity: 0; transform: translateX(0); }
-  62% { opacity: 1; transform: translateX(4px); }
-  95% { opacity: 1; }
-  100% { opacity: 0; transform: translateX(38px); }
+@keyframes takt-halten {
+  0%, 40.5% { color: var(--tinte-leise); font-weight: 400; }
+  42.105%, 56.3% { color: var(--kaki-text); font-weight: 500; }
+  57.895%, 100% { color: var(--tinte-leise); font-weight: 400; }
+}
+@keyframes takt-aus {
+  0%, 56.3% { color: var(--tinte-leise); font-weight: 400; }
+  57.895%, 98.4% { color: var(--kaki-text); font-weight: 500; }
+  100% { color: var(--tinte-leise); font-weight: 400; }
 }
 @media (min-width: 900px) {
   .hero { grid-template-columns: 7fr 5fr; gap: 32px; }
   .hero-text { padding-left: 4vw; padding-top: 24px; }
-  .atemkreis { justify-self: end; }
+  .atem { justify-self: end; }
 }
 
 /* ---------- Atemlinie ---------- */
@@ -429,8 +436,7 @@ figure { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .atemkreis-form { animation: none; transform: scale(0.8); }
-  .luft-ein { animation: none; opacity: 0; }
-  .luft-aus { animation: none; opacity: 0.8; transform: translateX(10px); }
+  .takt { animation: none; }
   .faden-pfad { animation: none !important; stroke-dashoffset: 0 !important; }
   .js .auf { opacity: 1; transform: none; transition: none; }
   .js .atemlinie path { stroke-dashoffset: 0; transition: none; }

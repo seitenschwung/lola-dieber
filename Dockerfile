@@ -13,7 +13,7 @@ RUN node scripts/beitraege.mjs
 FROM build AS test
 RUN node scripts/beitraege.mjs --pruefen
 
-FROM nginxinc/nginx-unprivileged:1.29-alpine
+FROM nginxinc/nginx-unprivileged:1.31-alpine
 ARG APP_VERSION=dev
 USER root
 COPY nginx.conf /etc/nginx/conf.d/default.conf

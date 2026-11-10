@@ -1,51 +1,43 @@
 # lola-dieber
 
-## Purpose
-Website von Lola Dieber: Psychologin (M. Sc.), Psychotherapeutin in Ausbildung, Beraterin (ADHS, Gruppen, Konzepte), Dozentin, Yogalehrerin. Production-URL: TODO.
+Website von Lola Dieber (Psychologin M. Sc., Beratung, Lehre, Yoga). Statischer One-Pager plus Beiträge,
+ausgeliefert von nginx-unprivileged. Kein package.json, kein npm, keine Abhängigkeiten. Production-URL: TODO.
 
-## Stack
-Statisches HTML/CSS/JS in `public/`, ausgeliefert von nginx-unprivileged. Beiträge: Markdown in `inhalte/beitraege/`, gebaut von `scripts/beitraege.mjs` (Node, ohne Abhängigkeiten) in der Docker-Stufe `build`.
+## Wo liegt was
+- `public/index.html`: One-Pager. Zwischen `BEITRAEGE:START/ENDE` steht generierte Vorschau (3 neueste): nicht von Hand ändern
+- `public/{impressum,datenschutz,404}.html`: Handgeschrieben
+- `public/css/stil.css`, `public/js/seite.js`, `public/fonts/` (selbst gehostet), `public/bilder/` (jpg+webp), `public/downloads/` (Flyer-PDFs)
+- `public/beitraege/`: generiert, gitignored
+- `inhalte/beitraege/*.md`: Beiträge; `_vorlage.md` erklärt das Format, `_`-Dateien und `entwurf: ja` werden nicht veröffentlicht
+- `scripts/beitraege.mjs`: Generator (Node, ohne Abhängigkeiten), auch Beitrags-Template-HTML
+- `nginx.conf`: Port 8080, `/healthz`, `/version.txt`, CSP, Cache-Header
+- `Dockerfile`: Stufen `build` -> `test` -> nginx. `docker-compose.yml`: Coolify, `image: ${IMAGE}`
 
-## Commands
-- Build: `node scripts/beitraege.mjs` (erzeugt `public/beitraege/`, gitignored, und die Vorschau zwischen `BEITRAEGE:START/ENDE` in `index.html`)
-- Dev server: `python3 -m http.server 8080 --bind 0.0.0.0 -d public`
-- Tests: `node scripts/beitraege.mjs --pruefen` (Docker-Stufe `test`); CI prüft axe und Lighthouse
+## Befehle (alle geprüft)
+- Bauen: `node scripts/beitraege.mjs` (schreibt `public/beitraege/`, aktualisiert Vorschau in `index.html`)
+- Testen: `node scripts/beitraege.mjs --pruefen` (schreibt nichts; Exit 1 bei ungültigem Kopfbereich/Datum)
+- Dev-Server: `node scripts/beitraege.mjs && python3 -m http.server 8080 --bind 0.0.0.0 -d public`
+  - Python-Server kennt kein `/healthz` und keine nginx-Header/CSP. Das prüft nur das Docker-Image
+  - Im Hintergrund gestartet mit `pkill -f "http.server 8080"` beenden
+- Image (CI-Vertrag): `docker build --build-arg APP_VERSION=<sha> .`; lokal meist kein Docker, dann CI abwarten
+- Deploy: nur über `main` (squash-merge, CI grün, Pipeline pusht nach ghcr.io und setzt `IMAGE` in Coolify). Nie von Hand
 
-## Layout
-- `public/index.html`: One-Pager (Begleitung, Beratung, Lehre, Yoga, Über mich, Kontakt)
-- `public/css/stil.css`: Farb-Tokens (Salbeinebel, Tannentinte, Kaki), Light/Dark
-- `public/fonts/`: selbst gehostete Schriften (DSGVO, kein Google-CDN)
-- `public/bilder/`: bearbeitete Fotos
-- `public/downloads/`: Flyer als PDF
-- `inhalte/beitraege/`: Beiträge, `_vorlage.md` erklärt das Format
+## CI (`.github/workflows/ci.yml`, Owner-verwaltet, nicht änderbar)
+- Dünner Aufruf von `seitenschwung/template@v1`: Dockerfile-Build (Stufe `test` zuerst), gehärtet gestartet
+  (read-only, nicht root), dann Playwright-Crawl, axe (WCAG AA), Lighthouse >= 90
+- `preview`-Job: Screenshot-Kommentar am PR, `main` liefert die Baseline
+- Nach Push: `ci_wait` mit Commit-Hash
 
-## CI and deploy contract
-`.github/workflows/ci.yml` is a thin caller of the shared pipeline in `seitenschwung/template`,
-managed by the owner. You can't change workflow files, so build the project to fit it:
-- If `package-lock.json` exists, CI runs `npm ci`, then `npm run lint`, `npm test` and
-  `npm run build` when those scripts exist. Keep them green locally before pushing.
-- If a `Dockerfile` exists, CI builds it and runs the image hardened: read-only root
-  filesystem, `/tmp` as the only writable path, no capabilities, as the image's (non-root)
-  user. The image must:
-  - listen on port **8080**
-  - answer `GET /healthz` with 200
-  - serve `GET /version.txt` with the build argument `APP_VERSION` (the commit SHA)
-- If `/` returns HTML, CI also crawls the site with Playwright, axe (WCAG AA, serious and
-  critical findings fail) and Lighthouse (accessibility, best practices and SEO at least 90).
-- A Dockerfile stage named `test` (`FROM ... AS test`) is built first: put lint and tests there for
-  stacks without `package-lock.json`. It must not be the last stage.
-- `docker-compose.yml` keeps the CrowdSec labels (`crowdsec.enable=true`,
-  `crowdsec.labels.type=nginx`) and the json-file log rotation on every service that serves traffic.
-  The CrowdSec agent on the server reads the container logs through them. Don't remove them; the
-  type must match a parser there, so ask the owner before changing it.
-- `docker-compose.yml` is what Coolify runs. Keep `image: ${IMAGE}`: the pipeline pushes
-  the tested image to ghcr.io and tells Coolify which tag to run.
-- `main` is production: every merge deploys after green CI. Work on branches, open PRs.
+## Konventionen
+- UI-Sprache Deutsch, Anrede „Sie“. Beratung ist keine Heilbehandlung: nie „Therapie anbieten“ o. ä.
+- CSP erlaubt nur `'self'`: keine externen Ressourcen, keine Inline-`style`/-Skripte. Verzögerungen via `:nth-child` oder JS `style.setProperty`
+- Farben: Kaki `#C9532A` nur Flächen/große Schrift; kleiner Text `#A6421F` (nicht auf Lehm)
+- Scroll-Effekte nur über CSS `animation-timeline`, nie Scroll-Listener; `prefers-reduced-motion` schaltet alles ab
+- Texte (Copy, Impressum, Datenschutz) sprechen für die Inhaberin: PR mit `manual-review`
 
-## Conventions
-- UI-Sprache Deutsch, Anrede „Sie“.
-- Keine externen Ressourcen (CSP in `nginx.conf` erlaubt nur `'self'`), keine Inline-Styles/-Skripte.
-- Kaki `#C9532A` nur für Flächen und große Schrift; für kleinen Text `#A6421F` (nicht auf Lehm).
-- Keine Inline-`style`-Attribute (CSP); Verzögerungen über `:nth-child` oder per JS `style.setProperty`.
-- Bewegung Stufe 8: Scroll-Effekte nur über CSS `animation-timeline`, nie Scroll-Listener; `prefers-reduced-motion` schaltet alles ab.
-- Beratung ist keine Heilbehandlung: keine Formulierungen wie „Therapie anbieten“.
+## Stolperstellen
+- CSS/JS-Cache-Version steht als `?v=7` in jeder HTML-Datei und im Template in `scripts/beitraege.mjs` (Zeile ~103): bei Änderung an `stil.css`/`seite.js` überall gemeinsam erhöhen
+- Neue Dateitypen im Image: `.dockerignore` schließt `*.md` aus, nur `inhalte/**/*.md` ist erlaubt
+- Beitrags-Dateiname wird zum URL-Slug (Umlaute -> ae/oe/ue, nur `a-z0-9-`)
+- Nach `node scripts/beitraege.mjs` zeigt `git status` ggf. eine geänderte `index.html` (Vorschau): mit committen, wenn Beiträge sich geändert haben
+- Bilder immer als jpg und webp ablegen; Flyer-PDF unter gleichem Namen ersetzen
